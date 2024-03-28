@@ -1,5 +1,3 @@
-package com.senacsp.hotelaria;
-
 public class Hotelaria {
 
     public static void main(String[] args) {

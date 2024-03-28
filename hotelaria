@@ -1,0 +1,10 @@
+package com.senacsp.hotelaria;
+
+public class Hotelaria {
+
+    public static void main(String[] args) {
+        System.out.print("Digite seu nome: ");
+        var nome = LerDados.lerTexto();
+        System.out.println("Seu nome é " + nome);
+    }
+}

@@ -1,7 +1,8 @@
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class SistemaHotel {
+    
     private static ArrayList<Hospede> hospedes = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -25,9 +26,9 @@ public class SistemaHotel {
                 case 1:
                     cadastrarHospede();
                     break;
-                case 2:
-                    fazerReserva();
-                    break;
+                /*case 2:
+                    fazerReserva.reservas();
+                    break;**/
                 case 3:
                     listarHospedes();
                     break;
@@ -46,7 +47,7 @@ public class SistemaHotel {
         String nome = lerDados.lerTexto();
 
         System.out.println("Data de nascimento: ");
-        Date dataDeNascimento = lerDados.lerData2();
+        LocalDate dataDeNascimento = lerDados.lerData();
         
         System.out.println("CPF/Passaporte/RNE (Digite somente números): ");
         String cpfPassaporteRne = lerDados.lerTexto();
@@ -71,6 +72,21 @@ public class SistemaHotel {
 
         System.out.println("Hospede cadastrado com sucesso!");
     }
+    
+    public record Hospede (
+        String nome,
+        LocalDate dataDeNascimento,
+        String cpfPassaporteRne,
+        String nacionalidade,
+        String endereco,
+        int numero,
+        String complemento,
+        String cep
+    ){
+        public String dataDeNascimentoString() {
+            return dataDeNascimento.format(lerDados.DATA);
+        }
+    }
 
     private static void listarHospedes() {
         if (hospedes.isEmpty()) {
@@ -78,105 +94,17 @@ public class SistemaHotel {
         } else {
             System.out.println("Lista de Hóspedes:");
             for (Hospede hospede : hospedes) {
-                System.out.println("Nome: " + hospede.getNome());
-                System.out.println("Data de Nascimento: " + hospede.getDataDeNascimento());
-                System.out.println("CPF/Passaporte/RNE: " + hospede.getCpfPassaporteRne());
-                System.out.println("Nacionalidade: " + hospede.getNacionalidade());
-                System.out.println("Endereço: " + hospede.getEndereco());
-                System.out.println("Número: " + hospede.getNumero());
-                System.out.println("Complemento: " + hospede.getComplemento());
-                System.out.println("CEP: " + hospede.getCep());
+                System.out.println("Nome: " + hospede.nome());
+                System.out.println("Data de Nascimento: " + hospede.dataDeNascimentoString());
+                System.out.println("CPF/Passaporte/RNE: " + hospede.cpfPassaporteRne());
+                System.out.println("Nacionalidade: " + hospede.nacionalidade());
+                System.out.println("Endereço: " + hospede.endereco());
+                System.out.println("Número: " + hospede.numero());
+                System.out.println("Complemento: " + hospede.complemento());
+                System.out.println("CEP: " + hospede.cep());
                 System.out.println();
             }
         }
-    }
-}
-
-class Hospede {
-    private String nome;
-    private Date dataDeNascimento;
-    private String cpfPassaporteRne;
-    private String nacionalidade;
-    private String endereco;
-    private int numero;
-    private String complemento;
-    private String cep;
-
-    public Hospede(String nome, Date dataDeNascimento, String cpfPassaporteRne, String nacionalidade, String endereco, int numero, String complemento, String cep) {
-        this.nome = nome;
-        this.dataDeNascimento = dataDeNascimento;
-        this.cpfPassaporteRne = cpfPassaporteRne;
-        this.nacionalidade = nacionalidade;
-        this.endereco = endereco;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.cep = cep;
-    }
-
-    // Getters
-    public String getNome() {
-        return nome;
-    }
-
-    public Date getDataDeNascimento() {
-        return dataDeNascimento;
-    }
-
-    public String getCpfPassaporteRne() {
-        return cpfPassaporteRne;
-    }
-
-    public String getNacionalidade() {
-        return nacionalidade;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public int getNumero() {
-        return numero;
-    }
-
-    public String getComplemento() {
-        return complemento;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    // Setters
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setDataDeNascimento(Date dataDeNascimento) {
-        this.dataDeNascimento = dataDeNascimento;
-    }
-
-    public void setCpfPassaporteRne(String cpfPassaporteRne) {
-        this.cpfPassaporteRne = cpfPassaporteRne;
-    }
-
-    public void setNacionalidade(String nacionalidade) {
-        this.nacionalidade = nacionalidade;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
     }
 }
 

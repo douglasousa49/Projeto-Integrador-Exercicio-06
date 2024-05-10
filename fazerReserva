@@ -1,0 +1,27 @@
+//import java.util.HashMap;
+//import java.util.Map;
+
+public class fazerReserva {
+    
+    public enum CategoriaQuarto {
+        PADRAO, LUXO, SUPREME, PRESIDENCIAL;
+    }
+
+    public record Quarto (
+        int numero,
+        int camas,
+        CategoriaQuarto categoria
+    ) {
+        
+    }
+}
+    
+    /*public static void reservas(){
+        
+        static Map<Integer, String> reservas = new HashMap<>();
+        
+        while(true){
+            System.out.println("---- Fazer Reserva ----");
+            System.out.println();
+            System.out.println("Digite o CPF do hospede:);"
+            var buscaCPF = lerDados.lerTexto();*/

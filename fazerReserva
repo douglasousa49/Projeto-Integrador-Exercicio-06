@@ -92,4 +92,17 @@ public class suites {
                 ", Check-in: " + reservaEX.checkIn() + ", Check-out: " + reservaEX.checkOut());
     }
     }
+ public static void cancelarReserva(){
+        
+        System.out.println("---- Cancelar Reserva ----");
+        System.out.println();
+        System.out.println("Qual o numero do quarto que deseja cancelar?");
+        var numeroQuarto = lerDados.lerInt();
+        if (reservas.containsKey(numeroQuarto)) {
+        reservas.remove(numeroQuarto);
+        System.out.println("---- Reserva Cancelada ----");
+    } else {
+        System.out.println("Reserva não encontrada.");
+    }
+}
 }

@@ -17,15 +17,18 @@ import java.text.SimpleDateFormat;
 public class lerDados {
     
     private static final Scanner scan = new Scanner(System.in);
-    private static final DateTimeFormatter DATA = DateTimeFormatter
+    
+    public static final DateTimeFormatter DATA = DateTimeFormatter
             .ofPattern("dd/MM/uuuu")
             .withChronology(IsoChronology.INSTANCE)
             .withResolverStyle(ResolverStyle.STRICT);
 
-    private static final DateTimeFormatter DATA_HORA = DateTimeFormatter
+    public static final DateTimeFormatter DATA_HORA = DateTimeFormatter
             .ofPattern("dd/MM/uuuu HH:mm:ss")
             .withChronology(IsoChronology.INSTANCE)
             .withResolverStyle(ResolverStyle.STRICT);
+    
+    public static final DateFormat DATA_FORMATO = new SimpleDateFormat("dd/MM/yyyy");
 
     public static int lerInt() {        
 
@@ -212,8 +215,6 @@ public class lerDados {
             System.out.print(tenteNovamente);
         }
     }
-    
-    private static final DateFormat DATA_FORMATO = new SimpleDateFormat("dd/MM/yyyy");
     
     public static Date lerData2() {
         while (true) {

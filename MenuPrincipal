@@ -26,20 +26,22 @@ public class SistemaHotel {
                 case 1:
                     cadastrarHospede();
                     break;
-                /*case 2:
-                    fazerReserva.reservas();
-                    break;**/
+                case 2:
+                    suites.fazerReserva();
+                    break;
                 case 3:
                     listarHospedes();
                     break;
+                case 4:
+                    suites.lista1();
                 case 5:
-                    break;
+                    return;
                 default:
                     System.out.println("tente novamente.");
                     break;
             }
         }
-    }
+    } 
     
     private static void cadastrarHospede() {     
                 
@@ -106,44 +108,4 @@ public class SistemaHotel {
             }
         }
     }
-}
-
-private static void fazerReserva() {
-    System.out.println("Fazer Reserva:");
-    System.out.println("Digite o nome do hóspede:");
-    String nomeHospede = lerDados.lerTexto();
-    
-    // Verifica se o hóspede existe na lista de hóspedes
-    Hospede hospede = procurarHospede(nomeHospede);
-    if (hospede == null) {
-        System.out.println("Hóspede não encontrado.");
-        return;
-    }
-
-    System.out.println("Digite o número do quarto:");
-    int numeroQuarto = lerDados.lerInt();
-
-    System.out.println("Digite a data de check-in (dd/MM/yyyy):");
-    Date dataCheckIn = lerDados.lerData();
-
-    System.out.println("Digite a data de check-out (dd/MM/yyyy):");
-    Date dataCheckOut = lerDados.lerData();
-
-    System.out.println("Digite o número de hóspedes:");
-    int numHospedes = lerDados.lerInt();
-
-    // Cria um objeto Reserva e adiciona à lista de reservas
-    Reserva reserva = new Reserva(hospede, numeroQuarto, dataCheckIn, dataCheckOut, numHospedes);
-    reservas.add(reserva);
-
-    System.out.println("Reserva feita com sucesso!");
-}
-
-private static Hospede procurarHospede(String nome) {
-    for (Hospede hospede : hospedes) {
-        if (hospede.getNome().equals(nome)) {
-            return hospede;
-        }
-    }
-    return null;
 }

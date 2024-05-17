@@ -85,14 +85,15 @@ public class suites {
     
     public static void lista1() {
     System.out.println("----- Reservas de Quartos -----");
-     System.out.println();
+    System.out.println();
     for (Map.Entry<Integer, Reserva> reserva : reservas.entrySet()) {
         Reserva reservaEX = reserva.getValue();
         System.out.println("Quarto numero " + reserva.getKey() + " ocupado por " + reservaEX.nome() +
                 ", Check-in: " + reservaEX.checkIn() + ", Check-out: " + reservaEX.checkOut());
     }
     }
- public static void cancelarReserva(){
+    
+    public static void cancelarReserva(){
         
         System.out.println("---- Cancelar Reserva ----");
         System.out.println();
@@ -103,6 +104,6 @@ public class suites {
         System.out.println("---- Reserva Cancelada ----");
     } else {
         System.out.println("Reserva não encontrada.");
+        }
     }
-}
 }

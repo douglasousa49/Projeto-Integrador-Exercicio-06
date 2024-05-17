@@ -1,13 +1,18 @@
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-
 public class SistemaHotel {
-    
+
     private static ArrayList<Hospede> hospedes = new ArrayList<>();
 
     public static void main(String[] args) {
+        if (Arquivo.arquivoExiste("Hospede.txt")) {
+            hospedes = (ArrayList<Hospede>) Hospede.carregarHospedesDoArquivo();
+        }
         menuPrincipal();
     }
 
@@ -33,31 +38,30 @@ public class SistemaHotel {
                     suites.fazerReserva();
                     break;
                 case 3:
-                    Hospede.listarHospedes();
+                    listarHospedes();
                     break;
                 case 4:
                     suites.lista1();
                     break;
                 case 5:
-                     suites.cancelarReserva();
+                    suites.cancelarReserva();
                     break;
-                 case 6:
-                      return;
+                case 6:
+                    return;
                 default:
-                    System.out.println("tente novamente.");
+                    System.out.println("Tente novamente.");
                     break;
             }
         }
-    } 
-    
-    public static void cadastrarHospede() {     
-                
+    }
+
+    public static void cadastrarHospede() {
         System.out.println("Nome: ");
         String nome = lerDados.lerTexto();
 
         System.out.println("Data de nascimento: ");
         LocalDate dataDeNascimento = lerDados.lerData();
-        
+
         System.out.println("CPF/Passaporte/RNE (Digite somente números): ");
         String cpfPassaporteRne = lerDados.lerTexto();
 
@@ -78,11 +82,31 @@ public class SistemaHotel {
 
         Hospede novoHospede = new Hospede(nome, dataDeNascimento, cpfPassaporteRne, nacionalidade, endereco, numeroEndereco, complementoEndereco, cep);
         hospedes.add(novoHospede);
+        Hospede.salvarHospedesEmArquivo(hospedes);
 
         System.out.println("Hospede cadastrado com sucesso!");
     }
-    
-    public record Hospede (
+
+    public static void listarHospedes() {
+        if (hospedes.isEmpty()) {
+            System.out.println("Não há hóspedes cadastrados.");
+        } else {
+            System.out.println("Lista de Hóspedes:");
+            for (Hospede hospede : hospedes) {
+                System.out.println("Nome: " + hospede.nome());
+                System.out.println("Data de Nascimento: " + hospede.dataDeNascimentoString());
+                System.out.println("CPF/Passaporte/RNE: " + hospede.cpfPassaporteRne());
+                System.out.println("Nacionalidade: " + hospede.nacionalidade());
+                System.out.println("Endereço: " + hospede.endereco());
+                System.out.println("Número: " + hospede.numero());
+                System.out.println("Complemento: " + hospede.complemento());
+                System.out.println("CEP: " + hospede.cep());
+                System.out.println();
+            }
+        }
+    }
+
+    public record Hospede(
         String nome,
         LocalDate dataDeNascimento,
         String cpfPassaporteRne,
@@ -91,11 +115,11 @@ public class SistemaHotel {
         int numero,
         String complemento,
         String cep
-    ){
+    ) {
         public String dataDeNascimentoString() {
             return dataDeNascimento.format(lerDados.DATA);
         }
-            
+
         public List<String> transformarEmLista() {
             return List.of(
                 nome,
@@ -121,11 +145,9 @@ public class SistemaHotel {
                 int numero = Integer.parseInt(lista.get(i + 5));
                 String complemento = lista.get(i + 6);
                 String cep = lista.get(i + 7);
-                
+
                 Hospede novoHospede = new Hospede(nome, dataDeNascimento, cpfPassaporteRne, nacionalidade, endereco, numero, complemento, cep);
                 resultado.add(novoHospede);
-                
-                salvarHospedeEmArquivo(novoHospede);
             }
             return resultado;
         }
@@ -139,31 +161,22 @@ public class SistemaHotel {
             return resultado;
         }
 
-        private static void listarHospedes() {
-            if (hospedes.isEmpty()) {
-                System.out.println("Não há hóspedes cadastrados.");
-            } else {
-                System.out.println("Lista de Hóspedes:");
-                for (Hospede hospede : hospedes) {
-                    System.out.println("Nome: " + hospede.nome());
-                    System.out.println("Data de Nascimento: " + hospede.dataDeNascimentoString());
-                    System.out.println("CPF/Passaporte/RNE: " + hospede.cpfPassaporteRne());
-                    System.out.println("Nacionalidade: " + hospede.nacionalidade());
-                    System.out.println("Endereço: " + hospede.endereco());
-                    System.out.println("Número: " + hospede.numero());
-                    System.out.println("Complemento: " + hospede.complemento());
-                    System.out.println("CEP: " + hospede.cep());
-                    System.out.println();
+        public static void salvarHospedesEmArquivo(List<Hospede> hospedes) {
+            if (!Arquivo.arquivoExiste("Hospede.txt")) {
+                try {
+                    Files.createFile(Path.of("Hospede.txt"));
+                } catch (IOException e) {
+                    throw new RuntimeException("Erro ao criar o arquivo Hospede.txt", e);
                 }
             }
-        }
 
-        public static void salvarHospedeEmArquivo(Hospede hospede) {
-            var lidas = Arquivo.lerLinhas("Hospede.txt");
-            var hospedes = lerDaLista(lidas);
-            hospedes.add(hospede);
             List<String> linhas = transformarEmStrings(hospedes);
             Arquivo.escreverLinhas(linhas, "Hospede.txt");
+        }
+
+        public static List<Hospede> carregarHospedesDoArquivo() {
+            List<String> linhas = Arquivo.lerLinhas("Hospede.txt");
+            return lerDaLista(linhas);
         }
     }
 }

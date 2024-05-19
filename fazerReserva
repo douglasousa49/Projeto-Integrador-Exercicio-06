@@ -7,7 +7,8 @@ import java.time.format.DateTimeFormatter;
 public class suites {
 
     private static Map<Integer, Reserva> reservas = new HashMap<>();
-
+    public record Reserva(String nome, String checkIn, String checkOut){}
+    
     public static void ReservaDeQuartos() {
         while (true) {
             System.out.println();
@@ -52,6 +53,33 @@ public class suites {
         String nome = lerDados.lerTexto();
         System.out.println("Digite seu CPF:");
         var cpf = lerDados.lerTexto();
+        var quemProcuro = cpf;
+        var lista1 = Arquivo.lerLinhas("Hospede.txt");
+        var lista2 = Menu.Hospede.lerDaLista(lista1);
+        var achei = false;
+        for (var h : lista2) {
+            if (h.cpfPassaporteRne().equals(quemProcuro)) {
+                achei = true;
+                System.out.println("Hospede encontrado: " + h.nome());
+                break;
+            }
+        }
+        if (!achei) {
+            System.out.println("Voce nao tem cadastro. Deseja se cadastrar?");
+            System.out.println("1 - SIM.");
+            System.out.println("2 - NAO.");
+            var escolha = lerDados.lerInt();
+            switch(escolha){
+                case 1:
+                    Menu.cadastrarHospede();
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("Numero invalido, Digite 1 ou 2.");
+                    break;
+            }
+        }
         System.out.println();
 
         while (true) {
@@ -80,8 +108,6 @@ public class suites {
             }
         }
     }
-
-   public record Reserva(String nome, String checkIn, String checkOut){}
     
     public static void lista1() {
     System.out.println("----- Reservas de Quartos -----");
@@ -102,6 +128,20 @@ public class suites {
         if (reservas.containsKey(numeroQuarto)) {
         reservas.remove(numeroQuarto);
         System.out.println("---- Reserva Cancelada ----");
+            System.out.println("Deseja fazer outra reserva?");
+            System.out.println("1 - SIM.");
+            System.out.println("2 - NAO.");
+            var escolha = lerDados.lerInt();
+            switch(escolha){
+                case 1:
+                    ReservaDeQuartos();
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("Numero invalido, Digite 1 ou 2.");
+                    break;
+            }
     } else {
         System.out.println("Reserva não encontrada.");
         }

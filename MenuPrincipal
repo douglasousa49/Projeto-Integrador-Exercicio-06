@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SistemaHotel {
+public class Menu {
 
     private static ArrayList<Hospede> hospedes = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class SistemaHotel {
             System.out.println("5 - Cancelar Reserva");
             System.out.println("6 - Sair");
             System.out.println();
-            System.out.println("Escolha uma das opções:");
+            System.out.println("Escolha uma das opcoes:");
             var escolha = lerDados.lerInt();
 
             switch (escolha) {
@@ -35,7 +35,7 @@ public class SistemaHotel {
                     cadastrarHospede();
                     break;
                 case 2:
-                    suites.fazerReserva();
+                    suites.ReservaDeQuartos();
                     break;
                 case 3:
                     listarHospedes();
@@ -56,13 +56,15 @@ public class SistemaHotel {
     }
 
     public static void cadastrarHospede() {
+        System.out.println("---- Cadastro de Hospedes ----");
+        System.out.println();
         System.out.println("Nome: ");
         String nome = lerDados.lerTexto();
 
         System.out.println("Data de nascimento: ");
         LocalDate dataDeNascimento = lerDados.lerData();
 
-        System.out.println("CPF/Passaporte/RNE (Digite somente números): ");
+        System.out.println("CPF/Passaporte/RNE (Digite somente numeros): ");
         String cpfPassaporteRne = lerDados.lerTexto();
 
         System.out.println("Nacionalidade: ");

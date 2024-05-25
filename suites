@@ -1,3 +1,4 @@
+import com.mycompany.menu.Menu.Hospede;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDate;
@@ -6,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class suites {
 
+    static Hospede achei;
     private static Map<Integer, Reserva> reservas = new HashMap<>();
     public record Reserva(String nome, String checkIn, String checkOut){}
     
@@ -49,22 +51,18 @@ public class suites {
     public static void fazerReserva() {
         
         System.out.println("---- Escolha de Quartos ----");
-        System.out.println("Qual seu nome?");
-        String nome = lerDados.lerTexto();
         System.out.println("Digite seu CPF:");
         var cpf = lerDados.lerTexto();
-        var quemProcuro = cpf;
-        var lista1 = Arquivo.lerLinhas("Hospede.txt");
-        var lista2 = Menu.Hospede.lerDaLista(lista1);
-        var achei = false;
-        for (var h : lista2) {
-            if (h.cpfPassaporteRne().equals(quemProcuro)) {
-                achei = true;
-                System.out.println("Hospede encontrado: " + h.nome());
+        var lista = Menu.Hospede.carregarHospedesDoArquivo();
+        achei = null;
+        for (var h : lista) {
+            if (h.cpfPassaporteRne().equals(cpf)) {
+                achei = h;
+                System.out.println("Hospede encontrado: " + achei.nome());
                 break;
             }
         }
-        if (!achei) {
+        if (achei == null) {
             System.out.println("Voce nao tem cadastro. Deseja se cadastrar?");
             System.out.println("1 - SIM.");
             System.out.println("2 - NAO.");
@@ -97,12 +95,12 @@ public class suites {
                 System.out.println("Data de Check-out: ");
                 LocalDate checkOut = lerDados.lerData();
                 System.out.println("---- Quarto Reservado ----");
-                System.out.println("Quarto " + numeroQuarto + " reservado para " + nome);
+                System.out.println("Quarto " + numeroQuarto + " reservado para " + achei.nome());
                 
                 String dataCheckInStr = checkIn.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
                 String dataCheckOutStr = checkOut.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
                 
-                Reserva reserva = new Reserva(nome, dataCheckInStr, dataCheckOutStr);
+                Reserva reserva = new Reserva(achei.nome(), dataCheckInStr, dataCheckOutStr);
                 reservas.put(numeroQuarto, reserva);
                 break;
             }

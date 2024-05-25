@@ -70,7 +70,7 @@ public class suites {
             switch(escolha){
                 case 1:
                     Menu.cadastrarHospede();
-                    break;
+                    return;
                 case 2:
                     return;
                 default:

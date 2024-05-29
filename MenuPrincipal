@@ -1,3 +1,5 @@
+package com.mycompany.menu;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +14,9 @@ public class Menu {
     public static void main(String[] args) {
         if (Arquivo.arquivoExiste("Hospede.txt")) {
             hospedes = (ArrayList<Hospede>) Hospede.carregarHospedesDoArquivo();
+        }
+        if (Arquivo.arquivoExiste("Reservas.txt")) {
+            suites.reservas = suites.carregarReservasDoArquivo();
         }
         menuPrincipal();
     }

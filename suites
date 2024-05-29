@@ -1,16 +1,19 @@
+package com.mycompany.menu;
+
 import com.mycompany.menu.Menu.Hospede;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-        
+import java.util.ArrayList;
 
 public class suites {
 
     static Hospede achei;
-    private static Map<Integer, Reserva> reservas = new HashMap<>();
-    public record Reserva(String nome, String checkIn, String checkOut){}
-    
+    static Map<Integer, Reserva> reservas = new HashMap<>();
+    public record Reserva(String nome, String checkIn, String checkOut) {}
+
     public static void ReservaDeQuartos() {
         while (true) {
             System.out.println();
@@ -49,7 +52,6 @@ public class suites {
     }
 
     public static void fazerReserva() {
-        
         System.out.println("---- Escolha de Quartos ----");
         System.out.println("Digite seu CPF:");
         var cpf = lerDados.lerTexto();
@@ -67,7 +69,7 @@ public class suites {
             System.out.println("1 - SIM.");
             System.out.println("2 - NAO.");
             var escolha = lerDados.lerInt();
-            switch(escolha){
+            switch (escolha) {
                 case 1:
                     Menu.cadastrarHospede();
                     return;
@@ -96,41 +98,42 @@ public class suites {
                 LocalDate checkOut = lerDados.lerData();
                 System.out.println("---- Quarto Reservado ----");
                 System.out.println("Quarto " + numeroQuarto + " reservado para " + achei.nome());
-                
+
                 String dataCheckInStr = checkIn.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
                 String dataCheckOutStr = checkOut.format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
-                
+
                 Reserva reserva = new Reserva(achei.nome(), dataCheckInStr, dataCheckOutStr);
                 reservas.put(numeroQuarto, reserva);
+                salvarReservasEmArquivo(reservas);
                 break;
             }
         }
     }
-    
+
     public static void lista1() {
-    System.out.println("----- Reservas de Quartos -----");
-    System.out.println();
-    for (Map.Entry<Integer, Reserva> reserva : reservas.entrySet()) {
-        Reserva reservaEX = reserva.getValue();
-        System.out.println("Quarto numero " + reserva.getKey() + " ocupado por " + reservaEX.nome() +
-                ", Check-in: " + reservaEX.checkIn() + ", Check-out: " + reservaEX.checkOut());
+        System.out.println("----- Reservas de Quartos -----");
+        System.out.println();
+        for (Map.Entry<Integer, Reserva> reserva : reservas.entrySet()) {
+            Reserva reservaEX = reserva.getValue();
+            System.out.println("Quarto numero " + reserva.getKey() + " ocupado por " + reservaEX.nome() +
+                    ", Check-in: " + reservaEX.checkIn() + ", Check-out: " + reservaEX.checkOut());
+        }
     }
-    }
-    
-    public static void cancelarReserva(){
-        
+
+    public static void cancelarReserva() {
         System.out.println("---- Cancelar Reserva ----");
         System.out.println();
         System.out.println("Qual o numero do quarto que deseja cancelar?");
         var numeroQuarto = lerDados.lerInt();
         if (reservas.containsKey(numeroQuarto)) {
-        reservas.remove(numeroQuarto);
-        System.out.println("---- Reserva Cancelada ----");
+            reservas.remove(numeroQuarto);
+            salvarReservasEmArquivo(reservas);
+            System.out.println("---- Reserva Cancelada ----");
             System.out.println("Deseja fazer outra reserva?");
             System.out.println("1 - SIM.");
             System.out.println("2 - NAO.");
             var escolha = lerDados.lerInt();
-            switch(escolha){
+            switch (escolha) {
                 case 1:
                     ReservaDeQuartos();
                     break;
@@ -140,8 +143,45 @@ public class suites {
                     System.out.println("Numero invalido, Digite 1 ou 2.");
                     break;
             }
-    } else {
-        System.out.println("Reserva não encontrada.");
+        } else {
+            System.out.println("Reserva não encontrada.");
         }
+    }
+
+    public static List<String> transformarEmStrings(Map<Integer, Reserva> reservas) {
+        List<String> resultado = new ArrayList<>();
+        for (var entry : reservas.entrySet()) {
+            int numeroQuarto = entry.getKey();
+            Reserva reserva = entry.getValue();
+            resultado.add(Integer.toString(numeroQuarto));
+            resultado.add(reserva.nome());
+            resultado.add(reserva.checkIn());
+            resultado.add(reserva.checkOut());
+        }
+        return resultado;
+    }
+
+    public static Map<Integer, Reserva> lerDaLista(List<String> lista) {
+        if (lista.size() % 4 != 0) throw new RuntimeException("Lista com erro");
+        Map<Integer, Reserva> resultado = new HashMap<>();
+        for (int i = 0; i < lista.size(); i += 4) {
+            int numeroQuarto = Integer.parseInt(lista.get(i));
+            String nome = lista.get(i + 1);
+            String checkIn = lista.get(i + 2);
+            String checkOut = lista.get(i + 3);
+            Reserva reserva = new Reserva(nome, checkIn, checkOut);
+            resultado.put(numeroQuarto, reserva);
+        }
+        return resultado;
+    }
+
+    public static void salvarReservasEmArquivo(Map<Integer, Reserva> reservas) {
+        List<String> linhas = transformarEmStrings(reservas);
+        Arquivo.escreverLinhas(linhas, "Reservas.txt");
+    }
+
+    public static Map<Integer, Reserva> carregarReservasDoArquivo() {
+        List<String> linhas = Arquivo.lerLinhas("Reservas.txt");
+        return lerDaLista(linhas);
     }
 }

@@ -205,14 +205,21 @@ public class lerDados {
         }
     }
     
-    public static Date lerData2() {
+    public static LocalDate lerData2() {
         while (true) {
             var linha = scan.nextLine();
             try {
-                return DATA_FORMATO.parse(linha);
-            } catch (ParseException erro) {
-                System.out.println("Formato de data inválido. Tente novamente (dd/MM/yyyy):");
+                LocalDate dataCerta = LocalDate.parse(linha, DATA);
+                LocalDate hoje = LocalDate.now();
+                if(dataCerta.isBefore(hoje)){
+                    System.out.println("A data informada nao pode ser anterior a data atual.");
+                }
+                else{
+                    return dataCerta;
+                }
+            } catch (DateTimeParseException erro) {
             }
+            System.out.println("Tente novamente:");
         }
     }
 
